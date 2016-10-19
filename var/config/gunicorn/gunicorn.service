@@ -1,0 +1,18 @@
+[Unit]
+Description=GUnicorn Daemon
+After=network.target
+
+[Service]
+PIDFile=/run/gunicorn/pid
+User=vagrant
+Group=vagrant
+# WorkingDirectory=/vagrant/var/sources
+WorkingDirectory=/vagrant/var/www
+# ExecStart=/virtualenvs/onesim/bin/gunicorn --workers 3 --bind 0.0.0.0:8000 --capture-output --enable-stdio-inheritance --pid /run/gunicorn/pid --log-level=debug --access-logfile=- --log-file=- _project_.wsgi:application
+ExecStart=/virtualenvs/onesim/bin/gunicorn --workers 3 --bind 0.0.0.0:8000 --capture-output --enable-stdio-inheritanc --pid /run/gunicorn/pid --log-level=debug --access-logfile=- --log-file=- server:app
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s TERM $MAINPID
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

@@ -7,11 +7,34 @@ class profiles::application {
   #   command => "/usr/bin/pip3  install pip3 install virtualenv"
   # }
 
-  exec { "install gunicorn":
-      # path => ["/usr/bin", "/usr/sbin", "/bin/bash"],
-      command => "/bin/bash -c '/vagrant/scripts/gunicorn.sh'",
-      # refreshonly => true
+  file {
+    'install_gunicorn':
+      ensure => 'file',
+      source => '/vagrant/scripts/gunicorn.sh',
+      path => '/usr/local/bin/gunicorn_script.sh',
+      # owner => 'root',
+      # group => 'root',
+      mode  => '0744', # Use 0700 if it is sensitive
+      notify => Exec['install_gunicorn_script'],
   }
+  exec {
+    'install_gunicorn_script':
+     command => '/usr/local/bin/gunicorn_script.sh',
+     refreshonly => true,
+  }->
+  file { '/etc/systemd/system/gunicorn.service':
+    ensure => '/vagrant/var/config/gunicorn/gunicorn.service',
+  }
+
+
+
+  # exec { "install gunicorn":
+  #     # path => ["/usr/bin", "/usr/sbin", "/bin/bash"],
+  #     command => "/bin/bash -c '/vagrant/scripts/gunicorn.sh'",
+  #     # refreshonly => true
+  # }
+
+
   # class { 'python' :
   #   ensure     => 'present',
   #   pip        => 'present',
