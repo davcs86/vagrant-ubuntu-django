@@ -7,6 +7,16 @@ class profiles::application {
   #   command => "/usr/bin/pip3  install pip3 install virtualenv"
   # }
 
+  file { [  '/run', '/run/gunicorn' ]:
+    ensure => 'directory',
+    owner  => 'vagrant',
+    group  => 'vagrant',
+    mode   => '0750',
+  }
+
+  exec { "install postgresql client":
+    command => "/usr/bin/apt-get install libpq-dev postgresql-common postgresql-client -y"
+  }->
   file {
     'install_gunicorn':
       ensure => 'file',
@@ -26,7 +36,16 @@ class profiles::application {
     ensure => '/vagrant/var/config/gunicorn/gunicorn.service',
   }
 
+  service { 'gunicorn':
+    enable => true,
+    ensure => 'running',
+    provider => 'systemd'
+  }
 
+  ufw::allow { 'allow-gunicorn-from-all':
+    port => 8000,
+    ip   => 'any',
+  }
 
   # exec { "install gunicorn":
   #     # path => ["/usr/bin", "/usr/sbin", "/bin/bash"],

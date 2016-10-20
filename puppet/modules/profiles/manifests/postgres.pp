@@ -75,6 +75,11 @@ class profiles::postgres {
     database_name           => $connection_settings_super2['PGDATABASE'],
   }
 
+  ufw::allow { 'allow-postgres-from-all':
+    port => $connection_settings_super2['PGPORT'],
+    ip   => 'any',
+  }
+
   ::consul::service { 'postgres':
     port => $connection_settings_super2['PGPORT'],
   }

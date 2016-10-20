@@ -16,6 +16,11 @@ class profiles::redissvr {
     redis_dir     => '/vagrant/var/data/redis'
   }
 
+  ufw::allow { 'allow-redis-from-all':
+    port => 6379,
+    ip   => 'any',
+  }
+
   #include docker
 
   #::docker::run { 'redis':
