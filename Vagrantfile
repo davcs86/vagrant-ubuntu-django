@@ -15,19 +15,15 @@ Vagrant.configure("2") do |config|
   		type = "webapp"
   		memory = "1024"
   		idm = id - 4
-  		$openPorts = {}
   		if id == 2
   			type = "master"
   			# memory = "1024"
-  			# $openPorts = [8301, 8300, 8500, 8600]
   		elsif id == 3
   			type = "database"
   			memory = "2048"
-  			# $openPorts = [5432, 6379]
   		elsif id == 4
   			type = "proxy"
   			memory = "512"
-  			$openPorts = {2408 => 80}
   		end
 
     	ip = "200.150.100.#{id}"
@@ -37,12 +33,22 @@ Vagrant.configure("2") do |config|
     		instance.vm.hostname = name
       		instance.vm.box = "bento/ubuntu-16.04"
 
-      		instance.vm.provision :hosts
-
-      		# ports
-      		$openPorts.each do |hport, gport|
-      		    instance.vm.network "forwarded_port", guest: gport, host: hport, auto_correct: true
-      		end
+      		instance.vm.provision :shell, :path => 'scripts/init.sh'
+      		
+      		# 
+      		instance.vm.provision :puppet do |puppet|
+				# puppet.options = '--verbose --summarize --hiera_config=/vagrant/hiera-no-consul.yaml --modulepath=/vagrant/puppet/modules:/puppet_modules --fileserverconfig=/vagrant/puppet/fileserver.conf'
+				puppet.options = '--hiera_config=/vagrant/hiera-no-consul.yaml --modulepath=/vagrant/puppet/modules:/puppet_modules'
+				puppet.manifests_path = "puppet/manifests"
+				puppet.manifest_file = "consul.pp"
+			end
+			# 
+      		instance.vm.provision :puppet do |puppet|
+				# puppet.options = '--verbose --summarize --hiera_config=/vagrant/hiera.yaml --modulepath=/vagrant/puppet/modules:/puppet_modules --fileserverconfig=/vagrant/puppet/fileserver.conf'
+				puppet.options = '--debug --verbose --summarize --reports store --hiera_config=/vagrant/hiera.yaml --modulepath=/vagrant/puppet/modules:/puppet_modules'
+				puppet.manifests_path = "puppet/manifests"
+				puppet.manifest_file = "base.pp"
+			end
 
 			# ip
 			instance.vm.network "private_network", :ip => ip
@@ -51,26 +57,14 @@ Vagrant.configure("2") do |config|
 			 	# Customize the amount of memory on the VM:
 			 	vb.memory = memory
 			 	vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+			 	vb.customize ["modifyvm", :id, "--cpuexecutioncap", "50"]
 			end
+			instance.vm.provision :hosts
 
-      		instance.vm.provision :shell, :path => 'scripts/init.sh'
-      		
-      		# 
-      		instance.vm.provision :puppet do |puppet|
-				# puppet.options = '--verbose --summarize --hiera_config=/vagrant/hiera-no-consul.yaml --modulepath=/vagrant/puppet/modules:/puppet_modules --fileserverconfig=/vagrant/puppet/fileserver.conf'
-				puppet.options = '--summarize --hiera_config=/vagrant/hiera-no-consul.yaml --modulepath=/vagrant/puppet/modules:/puppet_modules --fileserverconfig=/vagrant/puppet/fileserver.conf'
-				puppet.manifests_path = "puppet/manifests"
-				puppet.manifest_file = "consul.pp"
-			end
-			# 
-      		instance.vm.provision :puppet do |puppet|
-				# puppet.options = '--verbose --summarize --hiera_config=/vagrant/hiera.yaml --modulepath=/vagrant/puppet/modules:/puppet_modules --fileserverconfig=/vagrant/puppet/fileserver.conf'
-				puppet.options = '--summarize --hiera_config=/vagrant/hiera.yaml --modulepath=/vagrant/puppet/modules:/puppet_modules --fileserverconfig=/vagrant/puppet/fileserver.conf'
-				puppet.manifests_path = "puppet/manifests"
-				puppet.manifest_file = "base.pp"
-			end
-
+            # the Puppet Consul module doesn't register members
+            # https://github.com/solarkennedy/puppet-consul/issues/31
 			# instance.vm.provision "shell", inline: "consul join master" unless type == 'master'
+
     	end
     end
 end

@@ -23,8 +23,8 @@ class profiles::consul {
   }
 
   dnsmasq::conf { 'consul':
-    ensure  => present,
-    content => 'server=/consul/127.0.0.1#8600',
+     ensure  => present,
+     content => 'server=/consul/127.0.0.1#8600',
   }
 
 }

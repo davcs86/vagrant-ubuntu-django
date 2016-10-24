@@ -1,5 +1,5 @@
 :hierarchy:
-  - "%{::hostname}"
+  - "%{hostname}"
   - common
 :backends:
   - yaml
@@ -11,7 +11,8 @@
   :host: 127.0.0.1
   :port: 8500
   :paths:
-    - /v1/kv/configuration/%{fqdn}
+    - /v1/kv/configuration/%{ipaddress_enp0s8}
     - /v1/kv/configuration/common
     - /v1/catalog/service
     - /v1/catalog/node
+    #- /v1/agent/join/200.150.100.2

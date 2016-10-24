@@ -19,8 +19,6 @@ mod 'attachmentgenie/ufw'
 
 mod 'andschwa/unattended_upgrades'
 
-mod 'garethr/docker'
-
 mod 'KyleAnderson/consul'
 
 mod 'saz/dnsmasq'
@@ -29,8 +27,6 @@ mod 'jfryman/nginx'
 
 mod 'lynxman/hiera_consul'
 
-mod 'stankevich-python'
-
 mod 'dwerder-redis'
 mod 'puppetlabs-postgresql'
-mod 'puppetlabs-mongodb'
+
