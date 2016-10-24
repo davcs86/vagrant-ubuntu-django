@@ -63,7 +63,7 @@ Vagrant.configure("2") do |config|
 
             # the Puppet Consul module doesn't register members
             # https://github.com/solarkennedy/puppet-consul/issues/31
-			# instance.vm.provision "shell", inline: "consul join master" unless type == 'master'
+			instance.vm.provision "shell", inline: "sudo consul join master" unless type == 'master'
 
     	end
     end

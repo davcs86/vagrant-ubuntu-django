@@ -20,9 +20,9 @@ BASE_DIR = dirname(dirname(abspath(__file__)))
 PROJECT_ROOT = dirname(abspath(__file__))
 DATA_DIR = normpath(os.environ.get('DATA_DIR', join(BASE_DIR, '__data__')))
 
-REDIS_HOST = 'redis'
-POSTGRES_HOST = os.environ.get('DB_SERVICE', 'postgres')
-MONGO_HOST = '127.0.0.1'
+REDIS_HOST = 'database'
+POSTGRES_HOST = os.environ.get('DB_SERVICE', 'database')
+# MONGO_HOST = '127.0.0.1'
 DB_NAME = os.environ.get('DB_NAME', 'default')
 
 # Quick-start development settings - unsuitable for production
@@ -35,7 +35,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'Q+%ik6z&!yer+ga9m=e%jcqAd21asdAFw2')
 DEBUG = os.environ.get('DEBUG', 'true').lower() == 'true'
 STATIC_ROOT = os.environ.get('STATIC_ROOT', join(DATA_DIR, 'static'))
 MEDIA_DIR = os.environ.get('MEDIA_DIR', join(DATA_DIR, 'media'))
-DATABASE = os.environ.get('DATABASE', 'sqlite3')
+DATABASE = os.environ.get('DATABASE', 'postgresql')
 
 ALLOWED_HOSTS = ['*']
 
@@ -88,45 +88,24 @@ TEMPLATES = [
 WSGI_APPLICATION = '_project_.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/1.8/ref/settings/#databases
-
-if DATABASE == 'sqlite3':
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(DATA_DIR, 'db.sqlite3'),
-        }
-    }
-elif DATABASE == 'postgresql':
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': DB_NAME,
-            'USER': os.environ['DB_USER'],
-            'PASSWORD': os.environ['DB_PASS'],
-            'HOST': POSTGRES_HOST,
-            'PORT': os.environ['DB_PORT']
-        }
-    }
-else:
-    raise RuntimeError('Bad django configuration. Invalid DATABASE type')
-
-
-MONGODB_DATABASES = {
+DATABASES = {
     'default': {
-        'name': DB_NAME,
-        'serverSelectionTimeoutMS': 200,
-        'host': MONGO_HOST,
-    },
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': DB_NAME,
+        'USER': os.environ['DB_USER'],
+        'PASSWORD': os.environ['DB_PASS'],
+        'HOST': POSTGRES_HOST,
+        'PORT': os.environ['DB_PORT']
+    }
 }
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es-mx'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Monterrey'
 
 USE_I18N = True
 USE_L10N = True
@@ -138,7 +117,7 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 MEDIA_URL = '/media/'
-DEFAULT_FILE_STORAGE = 'utils.gridfs.GridFSStorage'
+# DEFAULT_FILE_STORAGE = 'utils.gridfs.GridFSStorage'
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(PROJECT_ROOT, 'static'),
