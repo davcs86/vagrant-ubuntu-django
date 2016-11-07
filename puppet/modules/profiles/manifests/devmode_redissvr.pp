@@ -1,4 +1,4 @@
-class profiles::redissvr {
+class profiles::devmode_redissvr {
 
   # install latest stable build.
   class { 'redis::install':
@@ -21,8 +21,5 @@ class profiles::redissvr {
     ip   => 'any',
   }
 
-  ::consul::service { 'redis':
-    port => 6379,
-  }
 }
 

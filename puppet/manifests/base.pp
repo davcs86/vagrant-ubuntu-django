@@ -18,11 +18,11 @@ node 'proxy' {
   include roles::proxy
 }
 
-# node 'celery' {
-#   include roles::celery
-# }
-
 # others are instances of the webapp
 node default {
   include roles::app
+}
+
+node 'devmode' {
+  include roles::devmode
 }

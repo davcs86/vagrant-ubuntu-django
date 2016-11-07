@@ -1,4 +1,4 @@
-class profiles::application {
+class profiles::devmode_application {
 
   file { [  '/run', '/run/gunicorn', '/var/log/gunicorn' ]:
     ensure => 'directory',
@@ -35,10 +35,6 @@ class profiles::application {
   ufw::allow { 'allow-gunicorn-from-all':
     port => 8000,
     ip   => 'any',
-  }
-
-  ::consul::service { 'django-app':
-    port => 8000,
   }
 
 }

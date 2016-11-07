@@ -27,4 +27,9 @@ class profiles::consul {
      content => 'server=/consul/127.0.0.1#8600',
   }
 
+  dnsmasq::conf { 'google':
+     ensure  => present,
+     content => "server=8.8.8.8\nserver=8.8.4.4",
+  }
+
 }

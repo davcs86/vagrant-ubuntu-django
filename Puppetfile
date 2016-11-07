@@ -23,7 +23,7 @@ mod 'KyleAnderson/consul'
 
 mod 'saz/dnsmasq'
 
-mod 'jfryman/nginx'
+mod 'puppet-nginx'
 
 mod 'lynxman/hiera_consul'
 

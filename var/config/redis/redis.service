@@ -1,0 +1,14 @@
+[Unit]
+Description=Redis database server
+After=network.target
+
+[Service]
+#User=vagrant
+#Group=vagrant
+ExecStartPre=/bin/cp -f /vagrant/var/config/redis/redis.conf /run/redis/redis.conf
+ExecStart=/usr/local/bin/redis-server /run/redis/redis.conf
+ExecStop=/usr/local/bin/redis-cli -p 6379 shutdown
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

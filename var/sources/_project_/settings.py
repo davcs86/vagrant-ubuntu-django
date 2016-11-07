@@ -15,15 +15,14 @@ import os
 from os.path import join, abspath, normpath, dirname
 import warnings
 
-DEBUG = False
+DEBUG = True
 BASE_DIR = dirname(dirname(abspath(__file__)))
 PROJECT_ROOT = dirname(abspath(__file__))
 DATA_DIR = normpath(os.environ.get('DATA_DIR', join(BASE_DIR, '__data__')))
 
-REDIS_HOST = 'database'
-POSTGRES_HOST = os.environ.get('DB_SERVICE', 'database')
-# MONGO_HOST = '127.0.0.1'
-DB_NAME = os.environ.get('DB_NAME', 'default')
+REDIS_HOST = 'localhost'
+POSTGRES_HOST = 'localhost'
+DB_NAME = 'onesim'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
@@ -32,10 +31,9 @@ DB_NAME = os.environ.get('DB_NAME', 'default')
 SECRET_KEY = os.environ.get('SECRET_KEY', 'Q+%ik6z&!yer+ga9m=e%jcqAd21asdAFw2')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'true').lower() == 'true'
+#DEBUG = os.environ.get('DEBUG', 'true').lower() == 'true'
 STATIC_ROOT = os.environ.get('STATIC_ROOT', join(DATA_DIR, 'static'))
 MEDIA_DIR = os.environ.get('MEDIA_DIR', join(DATA_DIR, 'media'))
-DATABASE = os.environ.get('DATABASE', 'postgresql')
 
 ALLOWED_HOSTS = ['*']
 
@@ -49,7 +47,6 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     # apps
     'todo',
 )
@@ -91,11 +88,11 @@ WSGI_APPLICATION = '_project_.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': DB_NAME,
-        'USER': os.environ['DB_USER'],
-        'PASSWORD': os.environ['DB_PASS'],
+        'NAME': 'onesim',
+        'USER': 'onepro',
+        'PASSWORD': '0nepr0_2016',
         'HOST': POSTGRES_HOST,
-        'PORT': os.environ['DB_PORT']
+        'PORT': 5432
     }
 }
 
