@@ -21,3 +21,5 @@ sudo -u postgres psql -c "ALTER ROLE onepro SET timezone TO 'America/Monterrey';
 sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE onesim TO onepro;"
 
 sudo systemctl enable postgresql
+
+sudo systemctl start postgresql

@@ -1,8 +1,0 @@
-:hierarchy:
-  - "%{hostname}"
-:backends:
-  - yaml
-
-:yaml:
-  :datadir: '/vagrant/hieradata'
-
